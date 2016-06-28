@@ -1,0 +1,65 @@
+﻿<Page
+    x:Class="ListViewSample.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ListViewSample"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    xmlns:data="using:Blend.SampleData.SampleDataSource"
+    xmlns:groupdata="using:Windows.UI.Xaml.Data">
+
+    <Page.Resources>
+        <CollectionViewSource x:Name="cvs" Source="{x:Bind Groups}" ItemsPath="Items" IsSourceGrouped="True"/>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button x:Uid="ClickToSwitchView" HorizontalAlignment="Center" Content="Click To Switch View" Click="Button_Click"/>
+        <SemanticZoom x:Name="zoom" Grid.Row="1">
+            <SemanticZoom.ZoomedOutView>
+                <GridView ItemsSource="{Binding Source={StaticResource cvs},Path=CollectionGroups}"
+                          ScrollViewer.IsHorizontalScrollChainingEnabled="False">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="groupdata:ICollectionViewGroup">
+                            <Image Height="40" Width="40" Source="{x:Bind Group.(data:Group.Property3)}"/>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </SemanticZoom.ZoomedOutView>
+            <SemanticZoom.ZoomedInView>
+                <ListView IsSwipeEnabled="True"
+                          ItemsSource="{Binding Source={StaticResource cvs}}"
+                          ScrollViewer.IsVerticalScrollChainingEnabled="False">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="data:Item">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="{x:Bind Property1}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="Foreground" Value="Red"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.GroupStyle>
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate x:DataType="data:Group">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Image VerticalAlignment="Center" Height="40" Width="40" Source="{x:Bind Property3}"/>
+                                        <TextBlock VerticalAlignment="Center" Text='{x:Bind Property1}' Foreground="{StaticResource ApplicationForegroundThemeBrush}" Margin="5" FontSize="18" FontFamily="Segoe UI" FontWeight="Light" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </SemanticZoom.ZoomedInView>
+        </SemanticZoom>
+    </Grid>
+</Page>
