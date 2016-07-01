@@ -89,6 +89,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <None Include="Assets\ControlDerive.vsdx" />
     <None Include="project.json" />
     <None Include="SampleData\SampleDataSource\SampleDataSource.xsd" />
     <PRIResource Include="Strings\en-US\Resources.resw" />
